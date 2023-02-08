@@ -4,7 +4,7 @@
     This code will take simulated real-time data sending temperature readings
     for a smoker and two foods in the smoker to rabbitmq where these readings
     will be processes and monitored by three consumers, where these will
-    monitor if a significant temperature change has occurred.
+    monitor and alert if a significant temperature change has occurred.
     
 
 """
@@ -18,13 +18,14 @@ import time
 
 def offer_rabbitmq_admin_site():
     """Offer to open the RabbitMQ Admin website"""
-    ans = input("Would you like to monitor RabbitMQ queues? y or n ")
-    print()
-    if ans.lower() == "y":
-        webbrowser.open_new("http://localhost:15672/#/queues")
+    if show_offer == True
+        ans = input("Would you like to monitor RabbitMQ queues? y or n ")
         print()
+        if ans.lower() == "y":
+            webbrowser.open_new("http://localhost:15672/#/queues")
+            print()
 
-def send_temp(host: str, queue_name: str, queue_name1: str, queue_name2: str, message: str):
+def send_temp(host: str, queue_name: str, queue_name2: str, queue_name3: str, message: str):
     """
     Creates and sends a message to 3 queues each execution.
     This process runs and finishes.
@@ -52,11 +53,11 @@ def send_temp(host: str, queue_name: str, queue_name1: str, queue_name2: str, me
 
     for row in reader:
         # read a row from the file
-        tasks = row
+        Time, Channel1, Channel2, Channel3 = row
 
         # use an fstring to create a message from our data
         # notice the f before the opening quote for our string?
-        fstring_message = f"[{tasks}]"
+        fstring_message = f"[{Time}, {}]"
     
         # prepare a binary (1s and 0s) message to stream
         MESSAGE = fstring_message.encode()
@@ -77,8 +78,8 @@ def send_temp(host: str, queue_name: str, queue_name1: str, queue_name2: str, me
             # and help ensure messages are processed in order
             # messages will not be deleted until the consumer acknowledges
             ch.queue_declare(queue=queue_name, durable=True)
-            ch.queue_declare(queue=queue_name1, durable=True)
             ch.queue_declare(queue=queue_name2, durable=True)
+            ch.queue_declare(queue=queue_name3, durable=True)
             # use the channel to publish a message to the queue
             # every message passes through an exchange
             ch.basic_publish(exchange="", routing_key=queue_name, body=MESSAGE)
@@ -100,11 +101,11 @@ def send_temp(host: str, queue_name: str, queue_name1: str, queue_name2: str, me
 if __name__ == "__main__":  
     # ask the user if they'd like to open the RabbitMQ Admin site
     show_offer = False
-    offer_rabbitmq_admin_site(show_offer)
+    offer_rabbitmq_admin_site()
     # get the message from the command line
     # if no arguments are provided, use the default message
     # use the join method to convert the list of arguments into a string
     # join by the space character inside the quotes
     message = " ".join(sys.argv[1:]) or '{MESSAGE}'
     # send the message to the queue
-    send_temp("localhost","",message)
+    send_temp("localhost","01-smoker", "02-Food-A", "02-Food-B", message)
