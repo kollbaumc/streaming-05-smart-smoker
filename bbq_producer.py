@@ -57,7 +57,7 @@ def send_temp(host: str, queue_name: str, queue_name2: str, queue_name3: str, me
 
         # use an fstring to create a message from our data
         # notice the f before the opening quote for our string?
-        fstring_message = f"[{Time}, {}]"
+        fstring_message = f"[{Time}, {Channel1}, {Channel2}, {Channel3}]"
     
         # prepare a binary (1s and 0s) message to stream
         MESSAGE = fstring_message.encode()
