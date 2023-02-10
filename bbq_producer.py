@@ -18,7 +18,7 @@ import time
 
 def offer_rabbitmq_admin_site():
     """Offer to open the RabbitMQ Admin website"""
-    if show_offer == True
+    if show_offer == True:
         ans = input("Would you like to monitor RabbitMQ queues? y or n ")
         print()
         if ans.lower() == "y":
@@ -51,28 +51,22 @@ def send_temp(host: str, queue_name: str, queue_name2: str, queue_name3: str, me
     reader = csv.reader(input_file, delimiter=",")
 
 
-    for row in reader:
+    for data_row in reader:
         # read a row from the file
-        Time, Channel1, Channel2, Channel3 = row
-
-        # use an fstring to create a message from our data
-        # notice the f before the opening quote for our string?
-        fstring_message = f"[{Time}, {Channel1}, {Channel2}, {Channel3}]"
-    
-        # prepare a binary (1s and 0s) message to stream
-        MESSAGE = fstring_message.encode()
-
-        # use the socket sendto() method to send the message
-        sock.sendto(MESSAGE, address_tuple)
+        Time, Channel1, Channel2, Channel3 = data_row
 
         # sleep for a few seconds
-        time.sleep(3)
+        time.sleep(1)
 
         try:
             # create a blocking connection to the RabbitMQ server
             conn = pika.BlockingConnection(pika.ConnectionParameters(host))
             # use the connection to create a communication channel
             ch = conn.channel()
+            #Deleting the three existing queues
+            ch.queue_delete(queue_name)
+            ch.queue_delete(queue_name2)
+            ch.queue_delete(queue_name3)
             # use the channel to declare a durable queue
             # a durable queue will survive a RabbitMQ server restart
             # and help ensure messages are processed in order
@@ -80,15 +74,58 @@ def send_temp(host: str, queue_name: str, queue_name2: str, queue_name3: str, me
             ch.queue_declare(queue=queue_name, durable=True)
             ch.queue_declare(queue=queue_name2, durable=True)
             ch.queue_declare(queue=queue_name3, durable=True)
-            # use the channel to publish a message to the queue
-            # every message passes through an exchange
-            ch.basic_publish(exchange="", routing_key=queue_name, body=MESSAGE)
-            # print a message to the console for the user
-            print(f" [x] Sent {MESSAGE}")
+        
+
+            try:
+                Smoker = round(float(Channel1),2)
+                # use an fstring to create a message from our data
+                # notice the f before the opening quote for our string?
+                smoker_data = f"[{Time}, {Smoker}]"
+                # prepare a binary (1s and 0s) message to stream
+                MESSAGE = smoker_data.encode()
+                # use the socket sendto() method to send the message
+                sock.sendto(MESSAGE, address_tuple)
+                ch.basic_publish(exchange="", routing_key=queue_name, body=MESSAGE)
+                # print a message to the console for the user
+                print(f" [x] Sent Smoker Temp {MESSAGE}")
+            except ValueError:
+                pass
+            
+            try:
+                FoodA = round(float(Channel2),2)
+                # use an fstring to create a message from our data
+                # notice the f before the opening quote for our string?
+                FoodA_data = f"[{Time}, {FoodA}]"
+                # prepare a binary (1s and 0s) message to stream
+                MESSAGE2 = FoodA_data.encode()
+                # use the socket sendto() method to send the message
+                sock.sendto(MESSAGE2, address_tuple)
+                ch.basic_publish(exchange="", routing_key=queue_name2, body=MESSAGE2)
+                # print a message to the console for the user
+                print(f" [x] Sent Food A Temp {MESSAGE2}")
+            except ValueError:
+                pass
+
+            try:
+                FoodB = round(float(Channel3),2)
+                # use an fstring to create a message from our data
+                # notice the f before the opening quote for our string?
+                FoodB_data = f"[{Time}, {FoodB}]"
+                # prepare a binary (1s and 0s) message to stream
+                MESSAGE3 = FoodB_data.encode()
+                # use the socket sendto() method to send the message
+                sock.sendto(MESSAGE3, address_tuple)
+                ch.basic_publish(exchange="", routing_key=queue_name3, body=MESSAGE3)
+                # print a message to the console for the user
+                print(f" [x] Sent Food B Temp {MESSAGE3}")
+            except ValueError:
+                pass
+
+
 
         except pika.exceptions.AMQPConnectionError as e:
-            print(f"Error: Connection to RabbitMQ server failed: {e}")
-            sys.exit(1)
+                print(f"Error: Connection to RabbitMQ server failed: {e}")
+                sys.exit(1)
 
         finally:
             # close the connection to the server
