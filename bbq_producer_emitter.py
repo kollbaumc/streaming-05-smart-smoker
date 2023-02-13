@@ -56,7 +56,7 @@ def send_temp(host: str, queue_name: str, queue_name2: str, queue_name3: str, me
         Time, Channel1, Channel2, Channel3 = data_row
 
         # sleep for a few seconds
-        time.sleep(3)
+        time.sleep(0)
 
         try:
             # create a blocking connection to the RabbitMQ server

@@ -54,6 +54,8 @@ Perform calculations to determine if a significant event has occurred.
 
 ![Emitter Code](smokersemitter.png)
 
+![Output](smokerscreenshot2.png)
+
  
 
 
