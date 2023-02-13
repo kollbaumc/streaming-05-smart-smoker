@@ -56,7 +56,7 @@ def send_temp(host: str, queue_name: str, queue_name2: str, queue_name3: str, me
         Time, Channel1, Channel2, Channel3 = data_row
 
         # sleep for a few seconds
-        time.sleep(1)
+        time.sleep(3)
 
         try:
             # create a blocking connection to the RabbitMQ server
@@ -77,7 +77,7 @@ def send_temp(host: str, queue_name: str, queue_name2: str, queue_name3: str, me
         
 
             try:
-                Smoker = round(float(Channel1),2)
+                Smoker = round(float(Channel1),1)
                 # use an fstring to create a message from our data
                 # notice the f before the opening quote for our string?
                 smoker_data = f"[{Time}, {Smoker}]"
@@ -92,7 +92,7 @@ def send_temp(host: str, queue_name: str, queue_name2: str, queue_name3: str, me
                 pass
             
             try:
-                FoodA = round(float(Channel2),2)
+                FoodA = round(float(Channel2),1)
                 # use an fstring to create a message from our data
                 # notice the f before the opening quote for our string?
                 FoodA_data = f"[{Time}, {FoodA}]"
@@ -107,7 +107,7 @@ def send_temp(host: str, queue_name: str, queue_name2: str, queue_name3: str, me
                 pass
 
             try:
-                FoodB = round(float(Channel3),2)
+                FoodB = round(float(Channel3),1)
                 # use an fstring to create a message from our data
                 # notice the f before the opening quote for our string?
                 FoodB_data = f"[{Time}, {FoodB}]"
