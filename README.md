@@ -47,6 +47,11 @@ Simulate a streaming series of temperature readings from our smart smoker and tw
 Create a producer to send these temperature readings to RabbitMQ.
 Create three consumer processes, each one monitoring one of the temperature streams. 
 Perform calculations to determine if a significant event has occurred.
+
+## Screenshot
+
+![Emitter Code](smokersemitter.png)
+
  
 
 
