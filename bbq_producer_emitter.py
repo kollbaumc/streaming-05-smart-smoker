@@ -137,7 +137,7 @@ def send_temp(host: str, queue_name: str, queue_name2: str, queue_name3: str, me
 # If this is the program being run, then execute the code below
 if __name__ == "__main__":  
     # ask the user if they'd like to open the RabbitMQ Admin site
-    show_offer = False
+    show_offer = True
     offer_rabbitmq_admin_site()
     # get the message from the command line
     # if no arguments are provided, use the default message
