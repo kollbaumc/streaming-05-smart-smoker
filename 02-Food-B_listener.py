@@ -11,6 +11,9 @@
 import pika
 import sys
 import time
+from collections import deque
+
+FB_deque = deque(Maxlen = 20)
 
 # define a callback function to be called when a message is received
 def FoodB_callback(ch, method, properties, body):
@@ -70,7 +73,7 @@ def main_FoodB(hn: str = "localhost", qn: str = "task_queue"):
         # configure the channel to listen on a specific queue,  
         # use the callback function named callback,
         # and do not auto-acknowledge the message (let the callback handle it)
-        channel.basic_consume( queue=qn, on_message_callback=FoodB_callback)
+        channel.basic_consume( queue=qn, auto_ack=False, on_message_callback=FoodB_callback)
 
         # print a message to the console for the user
         print(" [*] Ready for work. To exit press CTRL+C")
