@@ -49,6 +49,8 @@ def main_FoodA(hn: str = "localhost", qn: str = "task_queue"):
         # use the connection to create a communication channel
         channel = connection.channel()
 
+        channel.queue_delete("02-Food-A")
+
         # use the channel to declare a durable queue
         # a durable queue will survive a RabbitMQ server restart
         # and help ensure messages are processed in order
