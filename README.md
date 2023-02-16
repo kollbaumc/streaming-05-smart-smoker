@@ -4,7 +4,11 @@
 
 # streaming-05-smart-smoker
 
-This repo is to store our module 5 project in which we create a producer that sends messages to a queue about temperatures for a meat smoker.  This will send the temperature of the smoker, temperature of food A, and temperature of food B to three separate queues to eventually be processed by three separate consumers.    
+This repo is to store our module 5 project in which we create a producer that sends messages to a queue about temperatures for a meat smoker.  This will send the temperature of the smoker, temperature of food A, and temperature of food B to three separate queues to eventually be processed by three separate consumers.  
+
+# streaming-06-smart-smoker
+
+This part of the repo is where we create three different consumers.  One consumer will recieve messages for the smoker temperature.  One will recieve messages for the temperature for food A.  The last will recieve messages for the temperature of food B.  
 
 ## Before You Begin
 
