@@ -13,17 +13,22 @@ import sys
 import time
 from collections import deque
 
-FB_deque = deque(Maxlen = 20)
+FB_deque = deque(maxlen = 20)
+alert = "Alert! Alert! Food B is stalled and not warming up!"
 
 # define a callback function to be called when a message is received
 def FoodB_callback(ch, method, properties, body):
     """ Define behavior on getting a message."""
+    foodB_message =  body.decode().split(",")
+    temp = ['0']
+    temp[0] = float(foodB_message[1])
+    FB_deque.append(temp[0])
+    if len(FB_deque) == 20:
+        FBalert = float(FB_deque[0]-FB_deque[19])
+        if FBalert < 1:
+            print(alert)
     # decode the binary message body to a string
-    print(f" [x] Received {body.decode()}")
-    # simulate work by sleeping for the number of dots in the message
-    time.sleep(body.count(b"."))
-    # when done with task, tell the user
-    print(" [x] Done.")
+    print(f" [x] Received food B temp.  Food B temp is {foodB_message}")
     # acknowledge the message was received and processed 
     # (now it can be deleted from the queue)
     ch.basic_ack(delivery_tag=method.delivery_tag)

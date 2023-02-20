@@ -8,27 +8,32 @@
 
 import pika
 import sys
-import time
 from collections import deque
 
 s_deque = deque(maxlen = 5)
+alert = "Alert! Alert! Smoker temperature is decreasing at a high rate! Temp has gone down by more than 15 degrees in 2.5 minutes"
 
 # define a callback function to be called when a message is received
-def Smoker_callback(ch, method, properties, body):
+def smoker_callback(ch, method, properties, body):
     """ Define behavior on getting a message."""
+    smoker_message =  body.decode().split(",")
+    temp = ['0']
+    temp[0] = float(smoker_message[1])
+    s_deque.append(temp[0])
+    if len(s_deque) == 5:
+        smokeralert = float(s_deque[0]-s_deque[4])
+        if smokeralert > 15:
+            print(alert)
     # decode the binary message body to a string
-    print(f" [x] Received {body.decode()}")
-    # simulate work by sleeping for the number of dots in the message
-    time.sleep(body.count(b"."))
+    print(f" [x] Received the temp.  Smoker temp is {smoker_message}")
     # when done with task, tell the user
-    print(" [x] Done.")
     # acknowledge the message was received and processed 
     # (now it can be deleted from the queue)
     ch.basic_ack(delivery_tag=method.delivery_tag)
 
 
 # define a main function to run the program
-def main_smoker(hn: str = "localhost", qn: str = "task_queue"):
+def main(hn: str = "localhost", qn: str = "task_queue"):
     """ Continuously listen for task messages on a named queue."""
 
     # when a statement can go wrong, use a try-except block
@@ -50,8 +55,6 @@ def main_smoker(hn: str = "localhost", qn: str = "task_queue"):
         # use the connection to create a communication channel
         channel = connection.channel()
 
-        channel.queue_delete("01-smoker")
-
         # use the channel to declare a durable queue
         # a durable queue will survive a RabbitMQ server restart
         # and help ensure messages are processed in order
@@ -71,7 +74,7 @@ def main_smoker(hn: str = "localhost", qn: str = "task_queue"):
         # configure the channel to listen on a specific queue,  
         # use the callback function named callback,
         # and do not auto-acknowledge the message (let the callback handle it)
-        channel.basic_consume( queue=qn, auto_ack=False, on_message_callback=Smoker_callback)
+        channel.basic_consume( queue=qn, auto_ack=False, on_message_callback=smoker_callback)
 
         # print a message to the console for the user
         print(" [*] Ready for work. To exit press CTRL+C")
@@ -100,4 +103,4 @@ def main_smoker(hn: str = "localhost", qn: str = "task_queue"):
 # If this is the program being run, then execute the code below
 if __name__ == "__main__":
     # call the main function with the information needed
-    main_smoker("localhost", "01-smoker")
+    main("localhost", "01-smoker")

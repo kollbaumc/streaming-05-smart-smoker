@@ -56,17 +56,13 @@ def send_temp(host: str, queue_name: str, queue_name2: str, queue_name3: str, me
         Time, Channel1, Channel2, Channel3 = data_row
 
         # sleep for a few seconds
-        time.sleep(30)
+        time.sleep(1)
 
         try:
             # create a blocking connection to the RabbitMQ server
             conn = pika.BlockingConnection(pika.ConnectionParameters(host))
             # use the connection to create a communication channel
             ch = conn.channel()
-            #Deleting the three existing queues
-            ch.queue_delete(queue_name)
-            ch.queue_delete(queue_name2)
-            ch.queue_delete(queue_name3)
             # use the channel to declare a durable queue
             # a durable queue will survive a RabbitMQ server restart
             # and help ensure messages are processed in order
@@ -80,7 +76,7 @@ def send_temp(host: str, queue_name: str, queue_name2: str, queue_name3: str, me
                 Smoker = round(float(Channel1),1)
                 # use an fstring to create a message from our data
                 # notice the f before the opening quote for our string?
-                smoker_data = f"[{Time}, {Smoker}]"
+                smoker_data = f"{Time}, {Smoker}"
                 # prepare a binary (1s and 0s) message to stream
                 MESSAGE = smoker_data.encode()
                 # use the socket sendto() method to send the message
@@ -95,7 +91,7 @@ def send_temp(host: str, queue_name: str, queue_name2: str, queue_name3: str, me
                 FoodA = round(float(Channel2),1)
                 # use an fstring to create a message from our data
                 # notice the f before the opening quote for our string?
-                FoodA_data = f"[{Time}, {FoodA}]"
+                FoodA_data = f"{Time}, {FoodA}"
                 # prepare a binary (1s and 0s) message to stream
                 MESSAGE2 = FoodA_data.encode()
                 # use the socket sendto() method to send the message
@@ -110,7 +106,7 @@ def send_temp(host: str, queue_name: str, queue_name2: str, queue_name3: str, me
                 FoodB = round(float(Channel3),1)
                 # use an fstring to create a message from our data
                 # notice the f before the opening quote for our string?
-                FoodB_data = f"[{Time}, {FoodB}]"
+                FoodB_data = f"{Time}, {FoodB}"
                 # prepare a binary (1s and 0s) message to stream
                 MESSAGE3 = FoodB_data.encode()
                 # use the socket sendto() method to send the message
