@@ -12,6 +12,7 @@ from collections import deque
 
 s_deque = deque(maxlen = 5)
 alert = "Alert! Alert! Smoker temperature is decreasing at a high rate! Temp has gone down by more than 15 degrees in 2.5 minutes"
+dequesize = len(s_deque)
 
 # define a callback function to be called when a message is received
 def smoker_callback(ch, method, properties, body):
@@ -20,7 +21,7 @@ def smoker_callback(ch, method, properties, body):
     temp = ['0']
     temp[0] = float(smoker_message[1])
     s_deque.append(temp[0])
-    if len(s_deque) == 5:
+    if dequesize == 5:
         smokeralert = float(s_deque[0]-s_deque[4])
         if smokeralert > 15:
             print(alert)
@@ -94,6 +95,7 @@ def main(hn: str = "localhost", qn: str = "task_queue"):
         sys.exit(0)
     finally:
         print("\nClosing connection. Goodbye.\n")
+        channel.queue_delete(qn)
         connection.close()
 
 

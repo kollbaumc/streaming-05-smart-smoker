@@ -15,6 +15,7 @@ from collections import deque
 
 FB_deque = deque(maxlen = 20)
 alert = "Alert! Alert! Food B is stalled and not warming up!"
+dequesize = len(FB_deque)
 
 # define a callback function to be called when a message is received
 def FoodB_callback(ch, method, properties, body):
@@ -23,7 +24,7 @@ def FoodB_callback(ch, method, properties, body):
     temp = ['0']
     temp[0] = float(foodB_message[1])
     FB_deque.append(temp[0])
-    if len(FB_deque) == 20:
+    if dequesize == 20:
         FBalert = float(FB_deque[0]-FB_deque[19])
         if FBalert < 1:
             print(alert)
@@ -98,6 +99,7 @@ def main_FoodB(hn: str = "localhost", qn: str = "task_queue"):
         sys.exit(0)
     finally:
         print("\nClosing connection. Goodbye.\n")
+        channel.queue_delete(qn)
         connection.close()
 
 
