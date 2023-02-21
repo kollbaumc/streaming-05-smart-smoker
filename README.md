@@ -1,6 +1,9 @@
 # Chris Kollbaum
 
-## 2/10/2023
+## 2/10/2023 Module 5
+
+## 2/17/2023 Module 6
+
 
 # streaming-05-smart-smoker
 
@@ -10,7 +13,7 @@ This repo is to store our module 5 project in which we create a producer that se
 
 This part of the repo is where we create three different consumers.  One consumer will recieve messages for the smoker temperature.  One will recieve messages for the temperature for food A.  The last will recieve messages for the temperature of food B.  If the smoker temp decreases by more than 15 degrees in a 2.5 minute span the smoker consumer will send an alert stating that the smoker temp is rapidly decreasing and something may be wrong.  For the Food A and Food B consumers, if the temperature in a 10 minute span has not increased by at least 1 degree an alert will be sent saying that these food temps are stalled.  
 
-## Before You Begin
+## Before You Begin (prerequisites)
 
 1. Create a new repo into your GitHub with a readme.md
 1. Clone your repo down to your machine.
@@ -18,6 +21,7 @@ This part of the repo is where we create three different consumers.  One consume
 1. Add the csv file to your repo.
 1. Create a file for our bbq producer.
 1. View / Command Palette - then Python: Select Interpreter
+1. Make sure you have downloaded and installed rabbitmq, erlang to run rabbitmq, and pika
 
 ## Using a Barbeque Smoker
 When running a barbeque smoker, we monitor the temperatures of the smoker and the food to ensure everything turns out tasty. Over long cooks, the following events can happen:
