@@ -1,6 +1,8 @@
 """
     This program will listen and consume messages from the bbq emitter
-    for the temperature of the smoker every 30 seconds.  
+    for the temperature of the smoker every 30 seconds. It will also send 
+    an alert if in a 2.5 minute period the smoker goes down by more than 
+    15 degrees in temperature. 
 
     Chris Kollbaum 2/15/23
 
@@ -27,7 +29,7 @@ def smoker_callback(ch, method, properties, body):
     s_deque.append(temp[0])
     #creating the alert
     if len(s_deque) == 5:
-        smokeralert = float(s_deque[0]-s_deque[4])
+        smokeralert = s_deque[0]-s_deque[4]
         if smokeralert > 15:
             print(alert)
     # decode the binary message body to a string

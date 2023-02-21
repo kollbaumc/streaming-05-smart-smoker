@@ -2,7 +2,8 @@
     This program listens for work messages continuously. 
     It is listening for messages from the bbq emitter.  It will recieve 
     messages the include the temperature of food A that is located in 
-    the smoker.    
+    the smoker.  It will also send an alert if the food has not warmed up
+    by at least a degree in a 10 minute period.
 
     Chris Kollbaum 2/15/23
 
@@ -30,13 +31,10 @@ def FoodA_callback(ch, method, properties, body):
     FA_deque.append(temp[0])
     #creating the food A alert.
     if len(FA_deque) == 20:
-        FAalert = float(FA_deque[19]-FA_deque[0])
+        FAalert = FA_deque[19]-FA_deque[0]
         if FAalert < 1:
             print(alert)
-    # decode the binary message body to a string
     print(f" [x] Received the food A temp.  Food A temp is {foodA_message}")
-    # simulate work by sleeping for the number of dots in the message
-    # when done with task, tell the user
     # acknowledge the message was received and processed 
     # (now it can be deleted from the queue)
     ch.basic_ack(delivery_tag=method.delivery_tag)

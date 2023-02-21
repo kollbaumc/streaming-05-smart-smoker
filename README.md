@@ -60,6 +60,12 @@ Perform calculations to determine if a significant event has occurred.
 
 ![Output](smokerscreenshot2.png)
 
+## Rabbitmq admin
+
+![Rmq1](rabbitmq1.png)
+
+![Rmq2](rabbitmq2.png)
+
 ## Screenshots for the listeners
 
 ![4 concurrent processes](mod6screenshot.png)
