@@ -8,7 +8,7 @@ This repo is to store our module 5 project in which we create a producer that se
 
 # streaming-06-smart-smoker
 
-This part of the repo is where we create three different consumers.  One consumer will recieve messages for the smoker temperature.  One will recieve messages for the temperature for food A.  The last will recieve messages for the temperature of food B.  
+This part of the repo is where we create three different consumers.  One consumer will recieve messages for the smoker temperature.  One will recieve messages for the temperature for food A.  The last will recieve messages for the temperature of food B.  If the smoker temp decreases by more than 15 degrees in a 2.5 minute span the smoker consumer will send an alert stating that the smoker temp is rapidly decreasing and something may be wrong.  For the Food A and Food B consumers, if the temperature in a 10 minute span has not increase by at least 1 degree an alert will be sent saying that these food temps are stalled.  
 
 ## Before You Begin
 
@@ -54,11 +54,15 @@ Create a producer to send these temperature readings to RabbitMQ.
 Create three consumer processes, each one monitoring one of the temperature streams. 
 Perform calculations to determine if a significant event has occurred.
 
-## Screenshot
+## Screenshot for the emitter
 
 ![Emitter Code](smokersemitter.png)
 
 ![Output](smokerscreenshot2.png)
+
+## Screenshots for the listeners
+
+![4 concurrent processes](mod6screenshot.png)
 
  
 

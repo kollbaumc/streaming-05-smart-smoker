@@ -12,16 +12,21 @@ from collections import deque
 
 s_deque = deque(maxlen = 5)
 alert = "Alert! Alert! Smoker temperature is decreasing at a high rate! Temp has gone down by more than 15 degrees in 2.5 minutes"
-dequesize = len(s_deque)
+
 
 # define a callback function to be called when a message is received
 def smoker_callback(ch, method, properties, body):
     """ Define behavior on getting a message."""
+    #splitting the smoker data to isolate temp
     smoker_message =  body.decode().split(",")
-    temp = ['0']
+    # creating a temp variable
+    temp = [0]
+    #changing the temp string to a float
     temp[0] = float(smoker_message[1])
+    #placing the temp data in the right side of the deque
     s_deque.append(temp[0])
-    if dequesize == 5:
+    #creating the alert
+    if len(s_deque) == 5:
         smokeralert = float(s_deque[0]-s_deque[4])
         if smokeralert > 15:
             print(alert)

@@ -15,17 +15,22 @@ from collections import deque
 
 FB_deque = deque(maxlen = 20)
 alert = "Alert! Alert! Food B is stalled and not warming up!"
-dequesize = len(FB_deque)
+
 
 # define a callback function to be called when a message is received
 def FoodB_callback(ch, method, properties, body):
     """ Define behavior on getting a message."""
+    #splitting the data to isolate the temp
     foodB_message =  body.decode().split(",")
-    temp = ['0']
+    #creating a temp variable
+    temp = [0]
+    #converting the temp string to a float
     temp[0] = float(foodB_message[1])
+    #putting the data in the right side of the deque
     FB_deque.append(temp[0])
-    if dequesize == 20:
-        FBalert = float(FB_deque[0]-FB_deque[19])
+    #creating the food B alert
+    if len(FB_deque) == 20:
+        FBalert = float(FB_deque[19]-FB_deque[0])
         if FBalert < 1:
             print(alert)
     # decode the binary message body to a string
